@@ -1,5 +1,7 @@
-﻿namespace AnimePlayer.ViewModels;
+﻿using ReactiveUI;
 
-public class BaseViewModel
+namespace AnimePlayer.ViewModels;
+
+public class BaseViewModel : ReactiveObject
 {
 }

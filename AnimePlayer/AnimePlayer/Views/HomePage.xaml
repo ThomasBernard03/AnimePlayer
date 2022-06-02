@@ -2,25 +2,27 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AnimePlayer.Views.HomePage"
+             xmlns:viewModels="clr-namespace:AnimePlayer.ViewModels"
+             BackgroundColor="Black"
              Title="HomePage"
-             BackgroundColor="Black">
+             x:Name="MyHomePage">
     <StackLayout>
-        <CollectionView ItemsSource="{Binding Series}">
+        <CollectionView ItemsSource="{Binding Titles}">
             <CollectionView.ItemsLayout>
                 <LinearItemsLayout Orientation="Horizontal"/>
             </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Frame
+                        BackgroundColor="{StaticResource MidGray}"
                         HeightRequest="200"
                         WidthRequest="150"
                         Padding="5"
-                        Margin="10">
+                        Margin="5">
                         <Grid RowDefinitions="*, Auto">
                             <Image
                                 Source=""
-                                Grid.RowSpan="2"
-                                BackgroundColor="{StaticResource MidGray}"/>
+                                Grid.RowSpan="2"/>
                             <Label
                                 Padding="5"
                                 Grid.Row="1"
@@ -30,7 +32,10 @@
                                 HorizontalTextAlignment="Center"
                                 BackgroundColor="{StaticResource TransparentDarkGray}"/>
                         </Grid>
-                        
+
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding BindingContext.TitleSelectedCommand, Source={x:Reference MyHomePage}}" CommandParameter="{Binding .}"/>
+                        </Frame.GestureRecognizers>
                     </Frame>
                 </DataTemplate>
             </CollectionView.ItemTemplate>

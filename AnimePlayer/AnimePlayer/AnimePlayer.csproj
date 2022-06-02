@@ -49,11 +49,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+	  <PackageReference Include="Prism.DryIoc.Maui" Version="8.1.117-beta" />
+	  <PackageReference Include="Prism.Maui" Version="8.1.117-beta" />
 	  <PackageReference Include="ReactiveUI.Maui" Version="18.0.10" />
+	  <PackageReference Include="ThomasBernard.CsharpTools" Version="1.3.8" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <MauiXaml Update="Views\HomePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\TitlePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

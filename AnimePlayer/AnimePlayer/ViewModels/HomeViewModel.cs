@@ -1,4 +1,6 @@
-﻿using AnimePlayer.Wrappers;
+﻿using AnimePlayer.Commons;
+using AnimePlayer.Services.Interfaces;
+using AnimePlayer.Wrappers;
 using DynamicData;
 using ReactiveUI;
 using System.Collections.ObjectModel;
@@ -8,24 +10,34 @@ namespace AnimePlayer.ViewModels;
 
 public class HomeViewModel : BaseViewModel
 {
-    public HomeViewModel()
+    private readonly ITitleService _titleService;
+
+    public HomeViewModel(ITitleService titleService, INavigationService navigationService):base(navigationService)
     {
-        _seriesCache.AddOrUpdate(new List<SerieWrapper>() 
-        { 
-            new SerieWrapper() { Id = 1, Name = "Stanger things" },
-            new SerieWrapper() { Id = 2, Name = "Peaky blinders" },
-            new SerieWrapper() { Id = 3, Name = "Breaking bad" },
-            new SerieWrapper() { Id = 4, Name = "Vikings" },
-            new SerieWrapper() { Id = 5, Name = "Game of trones" },
-        });
+        _titleService = titleService;
 
-        _seriesCache.Connect().Bind(out _series).ObserveOn(RxApp.MainThreadScheduler).Subscribe();
-   }
+        TitleSelectedCommand = ReactiveCommand.Create<TitleWrapper, Task>(async titleWrapper => await OnTitleSelectedCommand(titleWrapper));
 
+        _titlesCache.Connect().Bind(out _titles).ObserveOn(RxApp.MainThreadScheduler).Subscribe();
+    }
+
+    public override async void OnNavigatedTo(INavigationParameters parameters)
+    {
+        base.OnNavigatedTo(parameters);
+
+        _titlesCache.AddOrUpdate(await _titleService.GetTitles());
+    }
+
+    public ReactiveCommand<TitleWrapper, Task> TitleSelectedCommand { get; set; }
+    private async Task OnTitleSelectedCommand(TitleWrapper titleWrapper)
+    {
+        var navigationParameters = new NavigationParameters { { "title", titleWrapper } };
+        await NavigationService.NavigateAsync(Constants.TitlePage, navigationParameters);
+    }
 
     #region DynamicList Series
-    private SourceCache<SerieWrapper, long> _seriesCache = new SourceCache<SerieWrapper, long>(l => l.Id);
-    private readonly ReadOnlyObservableCollection<SerieWrapper> _series;
-    public ReadOnlyObservableCollection<SerieWrapper> Series => _series;
+    private SourceCache<TitleWrapper, long> _titlesCache = new SourceCache<TitleWrapper, long>(l => l.Id);
+    private readonly ReadOnlyObservableCollection<TitleWrapper> _titles;
+    public ReadOnlyObservableCollection<TitleWrapper> Titles => _titles;
     #endregion
 }

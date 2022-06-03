@@ -2,9 +2,19 @@
 
 namespace AnimePlayer.ViewModels;
 
-public class BaseViewModel : ReactiveObject, INavigatedAware, IInitializeAsync
+public abstract class BaseViewModel : ReactiveObject, INavigatedAware, IInitializeAsync
 {
     protected INavigationService NavigationService;
+
+    #region PageTitle
+    private string _pageTitle;
+    public string PageTitle
+    {
+        get => _pageTitle;
+        set => this.RaiseAndSetIfChanged(ref _pageTitle, value);
+    }
+    #endregion
+
     public BaseViewModel(INavigationService navigationService)
     {
         NavigationService = navigationService;

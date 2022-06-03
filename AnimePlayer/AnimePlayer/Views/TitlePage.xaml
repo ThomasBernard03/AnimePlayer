@@ -2,36 +2,88 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AnimePlayer.Views.TitlePage"
-             Title="TitlePage">
-    <Grid RowDefinitions="3*, 20, 7*" BackgroundColor="Black" VerticalOptions="FillAndExpand">
-        <Image
-            HorizontalOptions="FillAndExpand"
-            Aspect="AspectFill"
-            Grid.RowSpan="2"
-            Source="{Binding Title.BackgroundImageUrl}"/>
-        <ScrollView Grid.Row="1" Grid.RowSpan="2">
-           
-            <Frame BackgroundColor="{StaticResource DarkGray}" CornerRadius="20">
-                <StackLayout>
-                    <Label FontSize="Title" Text="{Binding Title.Name}" HorizontalTextAlignment="Center" TextTransform="Uppercase"/>
+             xmlns:controls="clr-namespace:AnimePlayer.Views.Controls"
+             xmlns:commons="clr-namespace:AnimePlayer.Commons"
+             Title="{Binding PageTitle}">
 
-                    <Label Text="{Binding Title.Description}"/>
+    <Grid RowDefinitions="200, *" BackgroundColor="{StaticResource Black}">
+        <Image Source="{Binding Title.MovieBanner}" Aspect="AspectFill"/>
+        <ScrollView Grid.Row="1">
+            <StackLayout Padding="10" Spacing="2">
+                <Label Text="{Binding Title.Title}" FontSize="Subtitle" FontAttributes="Bold"/>
 
-                    <CollectionView ItemsSource="{Binding Title.Episodes}" IsGrouped="True">
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate>
-                                <StackLayout Orientation="Horizontal" HeightRequest="80" Margin="5" Spacing="10">
-                                    <Image Source="{Binding ThumbnailUrl}"/>
-                                    <StackLayout>
-                                        <Label Text="{Binding Name}" FontAttributes="Bold"/>
-                                        <Label Text="{Binding Description}" VerticalOptions="EndAndExpand"/>
-                                    </StackLayout>
-                                </StackLayout>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
+                <StackLayout Orientation="Horizontal" Spacing="10">
+                    <Label TextColor="{StaticResource Green}" Text="{Binding Title.RtScore, StringFormat='Recommanded at {0}%'}"/>
+                    <Label Text="{Binding Title.ReleaseDate}"/>
+                    <Label Text="{Binding Title.RunningTime, StringFormat='{0}min'}"/>
                 </StackLayout>
-            </Frame>
+
+                <controls:ButtonIconControl
+                    Text="Lecture"
+                    IconName="{Static commons:IconsFont.Play}"
+                    BackgroundColor="{StaticResource White}"
+                    IconColor="{StaticResource Black}"
+                    TextColor="{StaticResource Black}"/>
+
+                <controls:ButtonIconControl
+                    Text="Télécharger"
+                    IconName="{Static commons:IconsFont.DownCircled2}"
+                    BackgroundColor="{StaticResource MidGray}"
+                    IconColor="{StaticResource White}"
+                    TextColor="{StaticResource White}"/>
+
+                <Label Text="{Binding Title.Description}"/>
+
+                <Label TextColor="{StaticResource MidGray}">
+                    <Label.Text>
+                        <MultiBinding StringFormat="{}{0}, {1}">
+                            <Binding Path="Title.Director"/>
+                            <Binding Path="Title.Producer"/>
+                        </MultiBinding>
+                    </Label.Text>
+                </Label>
+
+
+                <Grid ColumnDefinitions="*,*">
+                    <Frame>
+                        <StackLayout>
+                            <Label
+                            FontSize="20"
+                            PropertyChanged="Label_PropertyChanged"
+                            x:Name="ThumbLabel"
+                            Style="{StaticResource AnimatedLabel}"
+                            HorizontalTextAlignment="Center"
+                            TextColor="{StaticResource Black}"
+                            FontFamily="{Static commons:Constants.IconsFont}"
+                            Text="{Binding Title.IsLiked,
+                            Converter={StaticResource BoolToThumbValueConverter}}">
+                            </Label>
+                            <Label HorizontalTextAlignment="Center" Text="Like" TextColor="{StaticResource Black}"/>
+                        </StackLayout>
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding LikeCommand}"/>
+                        </Frame.GestureRecognizers>
+                    </Frame>
+
+                    <Frame Grid.Column="1">
+                        <StackLayout>
+                            <Label
+                            FontSize="20"
+                            HorizontalTextAlignment="Center"
+                            TextColor="{StaticResource Black}"
+                            FontFamily="{Static commons:Constants.IconsFont}"
+                            Text="{Static commons:IconsFont.Share}">
+                            </Label>
+                            <Label HorizontalTextAlignment="Center" Text="Like" TextColor="{StaticResource Black}"/>
+                        </StackLayout>
+                    </Frame>
+                </Grid>
+                
+            </StackLayout>
+
+
+
+
         </ScrollView>
     </Grid>
 </ContentPage>

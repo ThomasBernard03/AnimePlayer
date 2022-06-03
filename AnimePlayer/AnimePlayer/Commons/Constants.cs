@@ -2,11 +2,9 @@
 
 public class Constants
 {
-    public const string WatchModeApiKey = "/?apiKey=";
+    public const string IconsFont = "IconsFont";
 
-
-    public const string WatchModeTitlesEndPoint = "https://api.watchmode.com/v1/list-titles";
-    public const string WatchModeTitleEndPoint = "https://api.watchmode.com/v1/title";
+    public const string GhibliApiTitlesEndPoint = "https://ghibliapi.herokuapp.com/films";
 
     #region Pages
     public const string NavigationPage = "NavigationPage";

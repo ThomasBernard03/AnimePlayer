@@ -3,36 +3,25 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AnimePlayer.Views.HomePage"
              xmlns:viewModels="clr-namespace:AnimePlayer.ViewModels"
-             BackgroundColor="Black"
              Title="HomePage"
              x:Name="MyHomePage">
-    <StackLayout>
+    <StackLayout BackgroundColor="{StaticResource DarkGray}">
         <CollectionView ItemsSource="{Binding Titles}">
             <CollectionView.ItemsLayout>
                 <LinearItemsLayout Orientation="Horizontal"/>
             </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Frame
-                        BackgroundColor="{StaticResource MidGray}"
-                        HeightRequest="200"
-                        WidthRequest="150"
-                        Padding="5"
-                        Margin="5">
+                    <Frame HeightRequest="300" WidthRequest="200" CornerRadius="20">
                         <Grid RowDefinitions="*, Auto">
-                            <Image
-                                Source=""
-                                Grid.RowSpan="2"/>
+                            <Image Source="{Binding Image}" Grid.RowSpan="2"/>
                             <Label
                                 Padding="5"
-                                Grid.Row="1"
-                                TextColor="White"
                                 FontAttributes="Bold"
-                                Text="{Binding Name}"
                                 HorizontalTextAlignment="Center"
-                                BackgroundColor="{StaticResource TransparentDarkGray}"/>
+                                Grid.Row="1" Text="{Binding Title}"
+                                BackgroundColor="{StaticResource TransparentBlack}"/>
                         </Grid>
-
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding BindingContext.TitleSelectedCommand, Source={x:Reference MyHomePage}}" CommandParameter="{Binding .}"/>
                         </Frame.GestureRecognizers>

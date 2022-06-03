@@ -36,7 +36,7 @@ public class HomeViewModel : BaseViewModel
     }
 
     #region DynamicList Series
-    private SourceCache<TitleWrapper, long> _titlesCache = new SourceCache<TitleWrapper, long>(l => l.Id);
+    private SourceCache<TitleWrapper, string> _titlesCache = new SourceCache<TitleWrapper, string>(l => l.Id);
     private readonly ReadOnlyObservableCollection<TitleWrapper> _titles;
     public ReadOnlyObservableCollection<TitleWrapper> Titles => _titles;
     #endregion

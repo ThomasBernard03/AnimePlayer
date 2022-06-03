@@ -1,16 +1,15 @@
 ﻿using AnimePlayer.Services.Interfaces;
 using AnimePlayer.Wrappers;
 using ReactiveUI;
+using System.Reactive;
 
 namespace AnimePlayer.ViewModels;
 
 public class TitleViewModel : BaseViewModel
 {
-    private readonly ITitleService _titleService;
-
     public TitleViewModel(ITitleService titleService, INavigationService navigationService) : base(navigationService)
     {
-        _titleService = titleService;
+        LikeCommand = ReactiveCommand.Create(OnLikeCommand);
     }
 
     public override async void OnNavigatedTo(INavigationParameters parameters)
@@ -19,18 +18,16 @@ public class TitleViewModel : BaseViewModel
 
         if (parameters.ContainsKey("title"))
         {
-            Title = await _titleService.GetTitle(parameters.GetValue<TitleWrapper>("title").Id);
-
-            EpisodesGroupedBySeasons = Title.Episodes
-                .DistinctBy(e => e.SeasonNumber)
-                .Select(episode => 
-                    new EpisodeSeasonGroupWrapper(episode.SeasonNumber.ToString(), Title.Episodes.Where(e => e.SeasonNumber == episode.SeasonNumber)
-                    .ToList()))
-                .ToList();
+            Title = parameters.GetValue<TitleWrapper>("title");
+            PageTitle = Title.Title;
         }
     }
 
-    public List<EpisodeSeasonGroupWrapper> EpisodesGroupedBySeasons { get; set; }
+    public ReactiveCommand<Unit, Unit> LikeCommand { get; set; }
+    private void OnLikeCommand()
+    {
+        Title.IsLiked = !Title.IsLiked;
+    }
 
     #region Title
     private TitleWrapper _title;
